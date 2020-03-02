@@ -17,5 +17,8 @@ app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/leaderboard", leaderboardRoutes);
+app.use((req, res, next) => {
+  res.status(404);
+});
 
 app.listen(3000);
