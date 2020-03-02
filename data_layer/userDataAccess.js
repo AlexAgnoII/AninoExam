@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 module.exports.createUser = name => {
   const user = new User({
@@ -9,5 +11,7 @@ module.exports.createUser = name => {
 };
 
 module.exports.getUser = _id => {
-  return User.findById(_id);
+  if (typeof _id === ObjectId) return User.findById(ObjectId(_id));
+
+  return null;
 };

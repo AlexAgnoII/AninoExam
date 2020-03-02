@@ -17,6 +17,8 @@ app.use(express.json());
 app.use("/user", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/leaderboard", leaderboardRoutes);
+
+//invalid path
 app.use((req, res, next) => {
   res.status(404);
   res.send({ error: "not found" });
