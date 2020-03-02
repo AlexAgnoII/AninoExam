@@ -13,7 +13,9 @@
 - DB_CONNECTION_LOCAL=\<your local mongodb access link here\> (if using local)
 - DB_CONNECTION_CLOUD=\<your cloud mongodb access link here\> (if using cloud)
 - PORT = \<desired port\>
-  
-5) type in cmd (from that root directory): 
+
+5) Head over to /setup/db.js and change the variable **dbConnection** to either process.env.DB_CONNECTION_LOCAL (for local) or process.env.DB_CONNECTION_CLOUD (for cloud).
+
+6) type in cmd (from that root directory): 
 - **npm start**
-6) After performing #4, the app should now be listening on the given port at index.js (in this case, 3000).
+7) After performing #4, the app should now be listening on the given port at index.js (in this case, 3000).
