@@ -8,15 +8,17 @@ router.post("/", async (req, res) => {
 
   //name doesnt exist, stop further process.
   if (!name) res.status(400).send("Invalid name parameter");
+  //name exists, continue
+  else {
+    const userCreated = await userDataAccess.createUser(name);
 
-  const userCreated = await userDataAccess.createUser(name);
-
-  res.json({
-    user: {
-      _id: userCreated._id,
-      name: userCreated.name
-    }
-  });
+    res.json({
+      user: {
+        _id: userCreated._id,
+        name: userCreated.name
+      }
+    });
+  }
 });
 
 //GET/user/:id
@@ -25,13 +27,14 @@ router.get("/:_id", async (req, res) => {
   const user = await userDataAccess.getUser(_id);
 
   if (!user) res.status(404).send("The user with the given _id was not found.");
-
-  res.json({
-    user: {
-      _id: user._id,
-      name: user.name
-    }
-  });
+  else {
+    res.json({
+      user: {
+        _id: user._id,
+        name: user.name
+      }
+    });
+  }
 });
 
 module.exports = router;

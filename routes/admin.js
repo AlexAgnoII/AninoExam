@@ -8,15 +8,17 @@ router.post("/leaderboard", async (req, res) => {
 
   //name does not exist, stop further process.
   if (!name) res.status(400).send("Invalid leaderboard name.");
+  //name is valid
+  else {
+    const newBoard = await boardDataAccess.createLeaderBoard(name);
 
-  const newBoard = await boardDataAccess.createLeaderBoard(name);
-
-  res.json({
-    board: {
-      _id: newBoard._id,
-      name: newBoard.name
-    }
-  });
+    res.json({
+      board: {
+        _id: newBoard._id,
+        name: newBoard.name
+      }
+    });
+  }
 });
 
 module.exports = router;

@@ -10,6 +10,10 @@ router.get("/:_id", async (req, res) => {
   const page = req.query.page || 1; //default 1
 
   const board = await boardDataAccess.getLeaderBoard(board_id, per_page, page);
+
+  if (board.length == 0)
+    res.status(404).send("The leaderboard with the given id was not found.");
+
   const leaderBoard = boardDataAccess.fixLeaderBoardFormat(board[0]);
 
   res.send(leaderBoard);
@@ -21,30 +25,33 @@ router.put("/:_id/user/:user_id/add_score", async (req, res) => {
   const board_id = req.params._id;
   const score_to_add = req.body.score_to_add;
 
-  let freshEntry = await entryDataAccess.updateEntry(
-    score_to_add,
-    user_id,
-    board_id
-  );
-
-  //if no such entry exists, create new.
-  if (!freshEntry) {
-    freshEntry = await entryDataAccess.createEntry(
+  if (!score_to_add) res.status(400).send("Invalid body parameter");
+  else {
+    let freshEntry = await entryDataAccess.updateEntry(
       score_to_add,
       user_id,
       board_id
     );
-  }
 
-  res.json({
-    entry: {
-      _id: freshEntry._id,
-      board_id: freshEntry.board_id,
-      score: freshEntry.score,
-      scored_at: freshEntry.scored_at,
-      user_id: freshEntry.user_id
+    //if no such entry exists, create new.
+    if (!freshEntry) {
+      freshEntry = await entryDataAccess.createEntry(
+        score_to_add,
+        user_id,
+        board_id
+      );
     }
-  });
+
+    res.json({
+      entry: {
+        _id: freshEntry._id,
+        board_id: freshEntry.board_id,
+        score: freshEntry.score,
+        scored_at: freshEntry.scored_at,
+        user_id: freshEntry.user_id
+      }
+    });
+  }
 });
 
 module.exports = router;
