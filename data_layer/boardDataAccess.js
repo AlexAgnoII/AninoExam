@@ -3,57 +3,68 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 module.exports.getLeaderBoard = (_id, per_page, page) => {
-  return Board.aggregate([
-    {
-      $match: {
-        _id: ObjectId(_id)
-      }
-    },
-    {
-      $lookup: {
-        from: "entry",
-        localField: "_id",
-        foreignField: "board_id",
-        as: "entries"
-      }
-    },
-    {
-      $unwind: {
-        path: "$entries",
-        preserveNullAndEmptyArrays: true
-      }
-    },
-    {
-      $lookup: {
-        from: "user",
-        localField: "entries.user_id",
-        foreignField: "_id",
-        as: "entries.user"
-      }
-    },
-    {
-      $sort: {
-        "entries.score": -1
-      }
-    },
-    {
-      $skip: per_page * (page - 1)
-    },
-    {
-      $limit: Number(per_page)
-    },
-    {
-      $group: {
-        _id: "$_id",
-        name: {
-          $first: "$name"
-        },
-        entries: {
-          $push: "$entries"
+  if (mongoose.Types.ObjectId.isValid(_id)) {
+    return Board.aggregate([
+      {
+        $match: {
+          _id: ObjectId(_id)
+        }
+      },
+      {
+        $lookup: {
+          from: "entry",
+          localField: "_id",
+          foreignField: "board_id",
+          as: "entries"
+        }
+      },
+      {
+        $unwind: {
+          path: "$entries",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $lookup: {
+          from: "user",
+          localField: "entries.user_id",
+          foreignField: "_id",
+          as: "entries.user"
+        }
+      },
+      {
+        $sort: {
+          "entries.score": -1
+        }
+      },
+      {
+        $skip: per_page * (page - 1)
+      },
+      {
+        $limit: Number(per_page)
+      },
+      {
+        $group: {
+          _id: "$_id",
+          name: {
+            $first: "$name"
+          },
+          entries: {
+            $push: "$entries"
+          }
         }
       }
-    }
-  ]);
+    ]);
+  } else {
+    return null;
+  }
+};
+
+module.exports.getLeaderBoardById = board_id => {
+  if (mongoose.Types.ObjectId.isValid(board_id)) {
+    return Board.findById(board_id);
+  }
+  return null;
 };
 
 module.exports.createLeaderBoard = name => {

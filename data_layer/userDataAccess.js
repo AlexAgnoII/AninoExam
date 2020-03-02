@@ -11,5 +11,6 @@ module.exports.createUser = name => {
 };
 
 module.exports.getUser = _id => {
-  return User.findById(ObjectId(_id));
+  if (mongoose.Types.ObjectId.isValid(_id)) return User.findById(ObjectId(_id));
+  return null;
 };
