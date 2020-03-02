@@ -35,35 +35,28 @@ router.put("/:_id/user/:user_id/add_score", async (req, res) => {
     );
 
     if (!freshEntry) {
-      //add a new entry.
-      let board_temp = boardDataAccess.getLeaderBoardById(board_id);
-      let user_temp = userDataAccess.getUser(user_id);
-
-      console.log(board_temp);
-      console.log(user_temp);
-
-      //only if the board and user exists but has not yet gotten an entry.
-      if (board_temp != null && user_temp != null) {
-        freshEntry = await entryDataAccess.createEntry(
-          score_to_add,
-          user_id,
-          board_id
-        );
-      } else {
-        res.status(400).send("Board/User, given the id, does not exist");
-      }
+      freshEntry = await entryDataAccess.createEntry(
+        score_to_add,
+        user_id,
+        board_id
+      );
+      res.json(sendJsonResponseNewEntry(freshEntry));
     } else {
-      res.json({
-        entry: {
-          _id: freshEntry._id,
-          board_id: freshEntry.board_id,
-          score: freshEntry.score,
-          scored_at: freshEntry.scored_at,
-          user_id: freshEntry.user_id
-        }
-      });
+      res.json(sendJsonResponseNewEntry(freshEntry));
     }
   }
 });
+
+const sendJsonResponseNewEntry = freshEntry => {
+  return {
+    entry: {
+      _id: freshEntry._id,
+      board_id: freshEntry.board_id,
+      score: freshEntry.score,
+      scored_at: freshEntry.scored_at,
+      user_id: freshEntry.user_id
+    }
+  };
+};
 
 module.exports = router;

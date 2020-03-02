@@ -62,7 +62,7 @@ module.exports.getLeaderBoard = (_id, per_page, page) => {
 
 module.exports.getLeaderBoardById = board_id => {
   if (mongoose.Types.ObjectId.isValid(board_id)) {
-    return Board.findById(board_id);
+    return Board.findOne({ _id: board_id });
   }
   return null;
 };
