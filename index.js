@@ -19,6 +19,9 @@ app.use("/admin", adminRoutes);
 app.use("/leaderboard", leaderboardRoutes);
 app.use((req, res, next) => {
   res.status(404);
+  res.send({ error: "not found" });
 });
 
-app.listen(3000);
+let port = process.env.PORT || 3000;
+console.log(`Listening to port: ${port}`);
+app.listen(port);
