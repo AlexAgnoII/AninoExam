@@ -12,6 +12,7 @@
 4) create your own .env file with the following (not including '<>'):
 - DB_CONNECTION_LOCAL=<your local mongodb access link here> (if using local)
 - DB_CONNECTION_CLOUD=<your cloud mongodb access link here> (if using cloud)
+- PORT=<desired port>
   
 5) type in cmd (from that root directory): 
 - **npm start**
