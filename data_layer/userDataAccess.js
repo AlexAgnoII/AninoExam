@@ -11,7 +11,5 @@ module.exports.createUser = name => {
 };
 
 module.exports.getUser = _id => {
-  if (typeof _id === ObjectId) return User.findById(ObjectId(_id));
-
-  return null;
+  return User.findById(ObjectId(_id));
 };
