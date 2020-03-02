@@ -15,8 +15,12 @@ router.get("/:_id", async (req, res) => {
   if (board == null)
     res.status(404).send("The leaderboard with the given id was not found.");
   else {
-    const leaderBoard = boardDataAccess.fixLeaderBoardFormat(board[0]);
-    res.send(leaderBoard);
+    if (board[0].entries[0].user.length > 0) {
+      const leaderBoard = boardDataAccess.fixLeaderBoardFormat(board[0]);
+      res.send(leaderBoard);
+    } else {
+      res.status(400).send("Current Leaderboard does not have any entries");
+    }
   }
 });
 
